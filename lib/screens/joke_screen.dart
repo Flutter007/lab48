@@ -71,28 +71,28 @@ class _JokeScreenState extends State<JokeScreen> {
     } else {
       content = JokeContainer(
         jokeCategory: joke!.category,
-        jokeBody: joke!.joke ?? '${joke!.setup!}\n${joke!.delivery}',
+        jokeBody: joke!.joke ?? '- ${joke!.setup!}\n - ${joke!.delivery}',
         fetchData: fetchJoke,
         addToFav: () => addToFav(joke!),
       );
     }
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            Expanded(child: Text('Funny Jokes')),
-            Expanded(child: Text(jokes.favoriteJokes.length.toString())),
-          ],
-        ),
+        title: Text('Funny Jokes'),
         actions: [
+          Text(
+            jokes.favoriteJokes.length.toString(),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+          ),
           IconButton(
             onPressed: goToFavorites,
             icon: Icon(
               Icons.favorite,
+              size: 35,
               color:
                   isFavorite
                       ? theme.colorScheme.error
-                      : theme.colorScheme.primary,
+                      : theme.colorScheme.surface,
             ),
           ),
         ],

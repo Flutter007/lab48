@@ -3,6 +3,7 @@ import 'package:lab48/models/favorites_jokes.dart';
 import 'package:lab48/providers/favorites_list_provider.dart';
 
 import '../models/joke.dart';
+import '../widgets/favorite_joke_card.dart';
 
 class FavoriteJokesScreen extends StatefulWidget {
   const FavoriteJokesScreen({super.key});
@@ -28,33 +29,42 @@ class _FavoriteJokesScreenState extends State<FavoriteJokesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Favorites Jokes!'),
-            Text(jokes.favoriteJokes.length.toString()),
+            Text('${jokes.favoriteJokes.length} 🫰'),
           ],
         ),
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: jokes.favoriteJokes.length,
-              itemBuilder: (ctx, index) {
-                final joke = jokes.favoriteJokes[index];
-                return ListTile(
-                  title: Text(joke.joke ?? '${joke.setup!}\n${joke.delivery}'),
-                  subtitle: Text(joke.type),
-                  trailing: IconButton(
-                    onPressed: () => removeFavorite(joke),
-                    icon: Icon(Icons.delete),
-                  ),
-                );
-              },
-            ),
-          ),
+          jokes.favoriteJokes.isNotEmpty
+              ? Expanded(
+                child: ListView.builder(
+                  itemCount: jokes.favoriteJokes.length,
+                  itemBuilder: (ctx, index) {
+                    final joke = jokes.favoriteJokes[index];
+                    return FavoriteJokeCard(
+                      jokeBody:
+                          joke.joke ??
+                          ' - ${joke.setup!}\n  - ${joke.delivery}',
+                      jokeCategory: joke.category,
+                      removeFavorite: () => removeFavorite(joke),
+                    );
+                  },
+                ),
+              )
+              : Center(
+                child: Text(
+                  'No jokes in favorites!',
+                  style: theme.textTheme.titleLarge,
+                ),
+              ),
         ],
       ),
     );

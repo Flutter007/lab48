@@ -17,37 +17,45 @@ class JokeContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Padding(
-      padding: EdgeInsets.all(14),
+      padding: EdgeInsets.symmetric(horizontal: 9),
       child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              'Category:$jokeCategory',
-              textAlign: TextAlign.center,
-              style: theme.textTheme.titleLarge,
-            ),
-            SizedBox(height: 10),
-            Text(
-              jokeBody,
-              textAlign: TextAlign.center,
-              style: theme.textTheme.titleMedium,
-            ),
-            SizedBox(height: 20),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(onPressed: fetchData, child: Text('Next! ➡️')),
-                SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: addToFav,
-                  child: Text('Favorites 🫰'),
-                ),
-              ],
-            ),
-          ],
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.symmetric(vertical: 20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: theme.colorScheme.error, width: 3),
+            color: theme.colorScheme.surface,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                'Category:$jokeCategory',
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleLarge,
+              ),
+              SizedBox(height: 10),
+              Text(
+                jokeBody,
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleMedium,
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(onPressed: fetchData, child: Text('Next! ➡️')),
+                  SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: addToFav,
+                    child: Text('Favorites 🫰'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
