@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:lab48/helperts/request.dart';
+import 'package:lab48/helpers/request.dart';
 import 'package:lab48/models/joke.dart';
 import 'package:lab48/widgets/joke_container.dart';
-
 import '../app_routes.dart';
+import '../data/favorite_jokes_data.dart';
 import '../models/favorites_jokes.dart';
 import '../providers/favorites_list_provider.dart';
 
@@ -25,6 +25,13 @@ class _JokeScreenState extends State<JokeScreen> {
   void initState() {
     super.initState();
     fetchJoke();
+  }
+
+  void loadJoke() async {
+    final loadedJoke = await loadJokes();
+    setState(() {
+      listProvider.favorites.favoriteJokes = loadedJoke;
+    });
   }
 
   @override
@@ -49,10 +56,12 @@ class _JokeScreenState extends State<JokeScreen> {
         isLoading = false;
       });
     }
+    loadJoke();
   }
 
   void addToFav(Joke joke) {
     listProvider.addFavorite(joke);
+    saveJokes(listProvider.favorites.favoriteJokes);
   }
 
   void goToFavorites() async {
@@ -61,17 +70,17 @@ class _JokeScreenState extends State<JokeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isFavorite = jokes.favoriteJokes.contains(joke);
+    bool isFavorite = jokes.favoriteJokes.any((j) => j.id == joke!.id);
     final theme = Theme.of(context);
     Widget content;
-    if (isLoading) {
+    if (isLoading && joke == null) {
       content = Center(child: CircularProgressIndicator());
     } else if (error != null) {
       content = Text(error!);
     } else {
       content = JokeContainer(
         jokeCategory: joke!.category,
-        jokeBody: joke!.joke ?? '- ${joke!.setup!}\n - ${joke!.delivery}',
+        jokeBody: joke!.joke ?? '- ${joke!.setup}\n - ${joke!.delivery}',
         fetchData: fetchJoke,
         addToFav: () => addToFav(joke!),
       );
@@ -81,7 +90,7 @@ class _JokeScreenState extends State<JokeScreen> {
         title: Text('Funny Jokes'),
         actions: [
           Text(
-            jokes.favoriteJokes.length.toString(),
+            listProvider.favorites.favoriteJokes.length.toString(),
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
           ),
           IconButton(

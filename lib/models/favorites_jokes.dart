@@ -1,10 +1,10 @@
 import 'joke.dart';
 
 class FavoritesJokes {
-  final List<Joke> favoriteJokes = [];
+  List<Joke> favoriteJokes = [];
 
   void addJokeToFav(Joke joke) {
-    if (!favoriteJokes.contains(joke)) {
+    if (!favoriteJokes.any((j) => j.id == joke.id)) {
       favoriteJokes.add(joke);
     } else {
       return;

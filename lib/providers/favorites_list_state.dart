@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lab48/models/favorites_jokes.dart';
 import 'package:lab48/providers/favorites_list_provider.dart';
 
+import '../data/favorite_jokes_data.dart';
 import '../models/joke.dart';
 
 class FavoritesListState extends StatefulWidget {
@@ -18,12 +19,14 @@ class _FavoritesListStateState extends State<FavoritesListState> {
     setState(() {
       favList.addJokeToFav(joke);
     });
+    saveJokes(favList.favoriteJokes);
   }
 
   void removeFavorite(Joke joke) {
     setState(() {
       favList.removeJokeFromFav(joke);
     });
+    saveJokes(favList.favoriteJokes);
   }
 
   @override

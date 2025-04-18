@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lab48/data/favorite_jokes_data.dart';
 import 'package:lab48/models/favorites_jokes.dart';
 import 'package:lab48/providers/favorites_list_provider.dart';
 
@@ -17,6 +18,19 @@ class _FavoriteJokesScreenState extends State<FavoriteJokesScreen> {
   late FavoritesListProvider listProvider;
 
   @override
+  void initState() {
+    super.initState();
+    loadJoke();
+  }
+
+  void loadJoke() async {
+    final loadedJoke = await loadJokes();
+    setState(() {
+      listProvider.favorites.favoriteJokes = loadedJoke;
+    });
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     listProvider = FavoritesListProvider.of(context)!;
@@ -25,6 +39,7 @@ class _FavoriteJokesScreenState extends State<FavoriteJokesScreen> {
 
   void removeFavorite(Joke joke) {
     listProvider.removeFavorite(joke);
+    saveJokes(listProvider.favorites.favoriteJokes);
   }
 
   @override
